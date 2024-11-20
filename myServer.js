@@ -260,23 +260,61 @@ app.get('/products', (req, res) => {
     });
 });
 
-    app.get('/products/search', async (req, res) => {
-    const searchQuery = req.query.q; // The search parameter, e.g., "ed"
+// In your Express app (server-side):
+app.put('/products/:id/purchase', async (req, res) => {
+  const productId = req.params.id; // Get the product ID from the URL
+  const { quantity } = req.body;   // Get the quantity from the request body
 
-    if (!searchQuery) {
-        return res.status(400).json({ error: 'Query parameter "q" is required' });
+  try {
+    // Find the product by ID in the database
+    const product = await db.collection('products').findOne({ id: parseInt(productId) });
+
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
     }
 
-    try {
-        // Search across all fields with a case-insensitive partial match
-        const products = await db.collection('products').find({
-            $text: { $search: searchQuery }
-        }).toArray();
+    // Calculate the new inventory after the purchase
+    const updatedInventory = product.inventory - quantity;
 
-        res.status(200).json(products);
-    } catch (error) {
-        console.error('Error retrieving data:', error);
-        res.status(500).json({ error: 'Error retrieving data' });
+    // Ensure the inventory does not go negative
+    if (updatedInventory < 0) {
+      return res.status(400).json({ error: 'Not enough inventory available' });
     }
+
+    // Update the inventory in the database
+    await db.collection('products').updateOne(
+      { id: parseInt(productId) },
+      { $set: { inventory: updatedInventory } }
+    );
+
+    res.status(200).json({ message: ' serverRes Inventory updated successfully' });
+  } 
+  catch (error) {
+    console.error('Error updating inventory:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
+
+
+app.get('/search', async (req, res) => {
+  const searchQuery = req.query.q; // Get the query parameter
+
+  if (!searchQuery) {
+    return res.status(400).json({ error: 'Query parameter "q" is required' });
+  }
+
+  try {
+    const results = await db.collection('products').find({
+      $or: [
+        { title: { $regex: searchQuery, $options: 'i' } },
+        { description: { $regex: searchQuery, $options: 'i' } }
+      ]
+    }).toArray();
+
+    res.status(200).json(results);
+  } catch (error) {
+    console.error('Error searching products:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});

@@ -2,7 +2,8 @@
 "author":"King Adaghe Williams",
 "private":true,"version":"0.2.0",
 "scripts": {
-    "test": "echo \"error: no test specified\" && exit 1"
+    "test": "echo \"error: no test specified\" && exit 1",
+    "start": "node server.js"
 },
 "dependencies":{
     "cors":"^2.8.5",

@@ -10,19 +10,7 @@ app.use(express.json());
 const PORT = 3000;
 
 app.use(cors()); // Enable CORS for cross-origin requests  
-const allowedOrigins = [
-  'https://kingwillex.github.io/AppFullStack/', // GitHub Pages URL
-  'http://localhost:3000'            // Local development (when using local )
-];
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
-}));
+
 
 //Serve static files from the images directory
 //cant move to frontend reminder

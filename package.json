@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {"name":"full-stack",
 "author":"King Adaghe Williams",
 "private":true,"version":"0.2.0",
@@ -14,4 +15,22 @@
     "mustache":"^4.2.0"},
 "devDependencies":{
     "nodemon":"^3.1.7"}
+=======
+{"name":"full-stack",
+"author":"King Adaghe Williams",
+"private":true,"version":"0.2.0",
+"scripts": {
+    "test": "echo \"error: no test specified\" && exit 1",
+    "start": "node server.js"
+},
+"dependencies":{
+    "cors":"^2.8.5",
+    "express":"^4.21.1",
+    "init":"^0.1.2",
+    "lodash":"^4.17.21",
+    "mongodb":"^6.10.0",
+    "mustache":"^4.2.0"},
+"devDependencies":{
+    "nodemon":"^3.1.7"}
+>>>>>>> 3fe9cafb1df6e58fc1cc53290619f61b117c45be
 }

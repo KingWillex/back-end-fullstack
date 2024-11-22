@@ -14,7 +14,7 @@ app.use(cors()); // Enable CORS for cross-origin requests
 
 //Serve static files from the images directory
 //cant move to frontend reminder
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('images', express.static(path.join(__dirname, 'images')));
 
 
 

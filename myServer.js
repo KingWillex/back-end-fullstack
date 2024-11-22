@@ -2,14 +2,21 @@ const express = require('express')
 const { ObjectId }= require('mongodb')
 const { MongoClient } = require('mongodb')
 const cors = require('cors'); // Import cors
-const { result } = require('lodash');
-
-
+const path = require('path');
 const app = express();
+
+
 app.use(express.json()); 
 const PORT = 3000;
 
-app.use(cors()); // Enable CORS for cross-origin requests
+app.use(cors()); // Enable CORS for cross-origin requests  
+
+
+
+//Serve static files from the images directory
+//cant move to frontend reminder
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 
 
 
@@ -53,7 +60,9 @@ app.get('/products', (req, res) => {
   
     db.collection('products')
       .find()
-      .forEach(product => products.push(product))
+      .forEach((product) => { 
+        product.image = `/images/${product.image}`
+        products.push(product)})
       .then(() => {
         res.status(200).json(products)
       })
@@ -288,7 +297,8 @@ app.put('/products/:id/purchase', async (req, res) => {
     );
 
     res.status(200).json({ message: ' serverRes Inventory updated successfully' });
-  } catch (error) {
+  } 
+  catch (error) {
     console.error('Error updating inventory:', error);
     res.status(500).json({ error: 'Internal server error' });
   }

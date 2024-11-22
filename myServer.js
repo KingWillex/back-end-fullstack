@@ -61,7 +61,7 @@ app.get('/products', (req, res) => {
     db.collection('products')
       .find()
       .forEach((product) => { 
-        product.image = `/${product.image}`
+        product.image = `/images/${product.image}`
         products.push(product)})
       .then(() => {
         res.status(200).json(products)
